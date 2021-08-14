@@ -50,7 +50,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.likeCount.setText(""+model.getLikes());
         //setting the image
         Glide.with(context).load(model.getImageUrl()).error(R.mipmap.ic_launcher).placeholder(R.mipmap.ic_launcher).into(holder.itemImage);
-        holder.progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -64,15 +63,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         private ImageView itemImage;
         private TextView likeCount,commentCount;
 
-        private ProgressBar progressBar;
-
         public ViewHolder(@NonNull @org.jetbrains.annotations.NotNull View itemView) {
             super(itemView);
 
             itemImage = itemView.findViewById(R.id.listImage);
             likeCount = itemView.findViewById(R.id.likeCount);
             commentCount = itemView.findViewById(R.id.commentCount);
-            progressBar = itemView.findViewById(R.id.progressbar);
+
         }
     }
 }

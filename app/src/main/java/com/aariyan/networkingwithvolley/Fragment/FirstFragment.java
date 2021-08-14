@@ -19,6 +19,7 @@ import com.aariyan.networkingwithvolley.Model.DataModel;
 import com.aariyan.networkingwithvolley.R;
 import com.aariyan.networkingwithvolley.Utility.Constant;
 import com.aariyan.networkingwithvolley.Utility.Networking;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.List;
 
@@ -31,6 +32,9 @@ public class FirstFragment extends Fragment {
 
     //instance variable for adapter:
     private ItemAdapter adapter;
+
+    //shimmer layout instance variable:
+    private ShimmerFrameLayout shimmerLayout;
 
     public FirstFragment() {
         // Required empty public constructor
@@ -53,17 +57,26 @@ public class FirstFragment extends Fragment {
         networking.gettingJSONDataFromURL(Constant.URL, new GenericCallback() {
             @Override
             public void onSuccess(List<DataModel> list) {
+
                 //if data get successfully
                 adapter = new ItemAdapter(requireContext(),list);
                 //setting the adapter to recyclerview:
                 itemRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
+
+                //setting the recycler view visible
+                itemRecyclerView.setVisibility(View.VISIBLE);
+
+                shimmerLayout.stopShimmer();
+                shimmerLayout.setVisibility(View.GONE);
             }
 
             //if find any error:
             @Override
             public void onError(String errorMessage) {
                 Toast.makeText(context, ""+errorMessage, Toast.LENGTH_SHORT).show();
+//                shimmerLayout.stopShimmer();
+//                shimmerLayout.setVisibility(View.GONE);
             }
         });
     }
@@ -87,5 +100,9 @@ public class FirstFragment extends Fragment {
         itemRecyclerView = root.findViewById(R.id.itemRecyclerView);
         //setting the layout manager:
         itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        //instantiate the shimmer Layout:
+        shimmerLayout = root.findViewById(R.id.shimmerLayoutContainer);
+        shimmerLayout.startShimmer();
     }
 }
