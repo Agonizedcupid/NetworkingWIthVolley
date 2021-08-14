@@ -4,12 +4,16 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.aariyan.networkingwithvolley.Adapter.ItemAdapter;
 import com.aariyan.networkingwithvolley.Interface.GenericCallback;
 import com.aariyan.networkingwithvolley.Model.DataModel;
 import com.aariyan.networkingwithvolley.R;
@@ -20,6 +24,13 @@ import java.util.List;
 
 public class FirstFragment extends Fragment {
 
+    //For inflating fragment layout:
+    private View root;
+    //RecyclerView Instance variable:
+    private RecyclerView itemRecyclerView;
+
+    //instance variable for adapter:
+    private ItemAdapter adapter;
 
     public FirstFragment() {
         // Required empty public constructor
@@ -43,7 +54,10 @@ public class FirstFragment extends Fragment {
             @Override
             public void onSuccess(List<DataModel> list) {
                 //if data get successfully
-                Toast.makeText(context, ""+list.size(), Toast.LENGTH_SHORT).show();
+                adapter = new ItemAdapter(requireContext(),list);
+                //setting the adapter to recyclerview:
+                itemRecyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
 
             //if find any error:
@@ -58,6 +72,20 @@ public class FirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_first, container, false);
+        root = inflater.inflate(R.layout.fragment_first, container, false);
+
+        //instantiate UI variable:
+        initUI();
+
+
+
+        return root;
+    }
+
+    private void initUI() {
+        //instantiate the recyclerview:
+        itemRecyclerView = root.findViewById(R.id.itemRecyclerView);
+        //setting the layout manager:
+        itemRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
 }
