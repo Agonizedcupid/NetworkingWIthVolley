@@ -3,11 +3,14 @@ package com.aariyan.networkingwithvolley.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +18,14 @@ import android.widget.Toast;
 
 import com.aariyan.networkingwithvolley.Adapter.ItemAdapter;
 import com.aariyan.networkingwithvolley.Interface.GenericCallback;
+import com.aariyan.networkingwithvolley.MainActivity;
 import com.aariyan.networkingwithvolley.Model.DataModel;
 import com.aariyan.networkingwithvolley.R;
 import com.aariyan.networkingwithvolley.Utility.Constant;
 import com.aariyan.networkingwithvolley.Utility.Networking;
 import com.facebook.shimmer.ShimmerFrameLayout;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -45,8 +51,6 @@ public class FirstFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //getting data through interface from the network:
-        getDataFromNetwork(getContext());
     }
 
     private void getDataFromNetwork(Context context) {
@@ -59,7 +63,7 @@ public class FirstFragment extends Fragment {
             public void onSuccess(List<DataModel> list) {
 
                 //if data get successfully
-                adapter = new ItemAdapter(requireContext(),list);
+                adapter = new ItemAdapter(requireContext(), list, getActivity());
                 //setting the adapter to recyclerview:
                 itemRecyclerView.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
@@ -74,12 +78,13 @@ public class FirstFragment extends Fragment {
             //if find any error:
             @Override
             public void onError(String errorMessage) {
-                Toast.makeText(context, ""+errorMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "" + errorMessage, Toast.LENGTH_SHORT).show();
 //                shimmerLayout.stopShimmer();
 //                shimmerLayout.setVisibility(View.GONE);
             }
         });
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,7 +95,8 @@ public class FirstFragment extends Fragment {
         //instantiate UI variable:
         initUI();
 
-
+        //getting data through interface from the network:
+        getDataFromNetwork(getContext());
 
         return root;
     }
